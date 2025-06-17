@@ -38,7 +38,7 @@ src/
 │   │   ├── emprestimo/           # Agregado Empréstimo (Raiz: Emprestimo)
 │   │   ├── shared/               # Objetos de Valor (ISBN, Endereco, etc.)
 │   │   └── repository/           # Interfaces de repositório
-│   └── service/                  # Serviços de domínio
+│   └── domain.service/                  # Serviços de domínio
 ├── infrastructure/
 │   └── persistence/              # Implementações em memória dos repositórios
 ├── application/                  # Casos de uso e serviços de aplicação
