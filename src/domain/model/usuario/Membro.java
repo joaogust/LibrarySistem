@@ -10,8 +10,8 @@ public class Membro {
     private final String CPF;
     private final Endereco endereco;
 
-    public Membro(UUID id, String nome, String CPF, Endereco endereco, String telefone) {
-        this.id = id;
+    public Membro(String nome, String CPF, Endereco endereco, String telefone) {
+        this.id = UUID.randomUUID();
         this.nome = nome;
         this.CPF = CPF;
         this.endereco = endereco;

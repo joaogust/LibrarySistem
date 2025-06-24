@@ -1,7 +1,10 @@
 package domain.model.usuario;
 
+import java.util.UUID;
+
 public class Endereco {
 
+    private final UUID id;
     private final String rua;
     private final String bairro;
     private final String cidade;
@@ -10,6 +13,7 @@ public class Endereco {
     private final String CEP;
 
     public Endereco(String rua, String bairro, String cidade, String estado, int numero, String CEP) {
+        this.id = UUID.randomUUID();
         this.rua = rua;
         this.bairro = bairro;
         this.cidade = cidade;

@@ -1,20 +1,27 @@
 package domain.model.emprestimo;
 
+import domain.model.livro.Copia;
 import domain.model.usuario.Membro;
 import domain.model.livro.Livro;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.UUID;
 
 public class Emprestimo {
 
     private final UUID id;
     private final Membro membro;
-    private ArrayList<Livro> livros;
+    private ArrayList<Copia> livros;
+    private LocalDate dataInicial;
+    private LocalDate dataFinal;
 
-    private Emprestimo(UUID id, Membro membro) {
-        this.id = id;
+    public Emprestimo(Membro membro, ArrayList<Copia> livros, LocalDate dataInicial, LocalDate dataFinal) {
+        this.id = UUID.randomUUID();
         this.membro = membro;
-        this.livros = new ArrayList<>();
+        this.livros = livros;
+        this.dataInicial = dataInicial;
+        this.dataFinal = dataFinal;
     }
 }

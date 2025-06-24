@@ -9,8 +9,8 @@ public class Autor {
     private final String nome;
     private ArrayList<Livro> livros;
 
-    private Autor(UUID id, String nome) {
-        this.id = id;
+    private Autor(String nome) {
+        this.id = UUID.randomUUID();
         this.nome = nome;
         this.livros = new ArrayList<>();
     }

@@ -7,8 +7,8 @@ public class Copia {
     private final UUID id;
     private boolean statusCopia;
 
-    private Copia(UUID id) {
-        this.id = id;
+    Copia() {
+        this.id = UUID.randomUUID();
         this.statusCopia = true;
     }
 
@@ -28,11 +28,11 @@ public class Copia {
         return "A cópia já estava indisponível.";
     }
 
-    public boolean isStatusCopia() {
-        return statusCopia;
-    }
-
     public UUID getId() {
         return id;
+    }
+
+    public boolean isStatusCopia() {
+        return statusCopia;
     }
 }
