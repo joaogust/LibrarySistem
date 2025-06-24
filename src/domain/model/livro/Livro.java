@@ -1,4 +1,4 @@
-package domain.model;
+package domain.model.livro;
 
 import java.util.ArrayList;
 import java.util.UUID;

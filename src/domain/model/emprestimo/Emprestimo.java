@@ -1,4 +1,7 @@
-package domain.model;
+package domain.model.emprestimo;
+
+import domain.model.usuario.Membro;
+import domain.model.livro.Livro;
 
 import java.util.ArrayList;
 import java.util.UUID;
