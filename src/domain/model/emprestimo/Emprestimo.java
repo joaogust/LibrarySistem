@@ -17,11 +17,9 @@ public class Emprestimo {
     private LocalDate dataInicial;
     private LocalDate dataFinal;
 
-    public Emprestimo(Membro membro, ArrayList<Copia> livros, LocalDate dataInicial, LocalDate dataFinal) {
+    public Emprestimo(Membro membro, ArrayList<Copia> livros) {
         this.id = UUID.randomUUID();
         this.membro = membro;
         this.livros = livros;
-        this.dataInicial = dataInicial;
-        this.dataFinal = dataFinal;
     }
 }

@@ -5,14 +5,15 @@ import java.util.UUID;
 
 public class Livro {
 
-    private final UUID id;
+    private static int ID;
+    private final int id;
     private final String titulo;
     private final String ISBN;
     private final ArrayList<Autor> autores;
     private final ArrayList<Copia> copias;
 
     public Livro(String titulo, String ISBN, ArrayList<Autor> autores, int qtdCopias) {
-        this.id = UUID.randomUUID();
+        this.id = ID++;
         this.titulo = titulo;
         this.ISBN = ISBN;
         this.autores = autores;
@@ -23,7 +24,7 @@ public class Livro {
         }
     }
 
-    public UUID getId() {
+    public int getId() {
         return id;
     }
 
