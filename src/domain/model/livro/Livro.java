@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public class Livro {
 
-    private static int ID;
+    private static int ID = 1;
     private final int id;
     private final String titulo;
     private final String ISBN;

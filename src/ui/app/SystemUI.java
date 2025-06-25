@@ -1,10 +1,20 @@
 package ui.app;
+import domain.model.emprestimo.EmprestimoRepository;
+import domain.model.livro.LivroRepository;
+import domain.model.usuario.Membro;
+import domain.model.usuario.MembroRepository;
+
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class SystemUI {
+
+    EmprestimoRepository emprestimos = new EmprestimoRepository();
+    LivroRepository livros = new LivroRepository();
+    MembroRepository membros = new MembroRepository();
 
     public void login() {
         JFrame janela = new JFrame();
@@ -31,7 +41,7 @@ public class SystemUI {
 
         // Botão "Entrar"
         JButton botaoLogar = new JButton("Entrar");
-        botaoLogar.setBounds(490,500,200,30);
+        botaoLogar.setBounds(490,400,200,30);
 
         botaoLogar.addActionListener(new ActionListener() {
             @Override
@@ -82,31 +92,64 @@ public class SystemUI {
 
         // Botões
         JButton opcao1 = new JButton("Listar Clientes");
-        opcao1.setBounds(100, 70,200,20);
+        opcao1.setBounds(490, 60,200,30);
+        opcao1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                listarClientes();
+            }
+        });
 
         JButton opcao2 = new JButton("Listar Livros");
-        opcao2.setBounds(100, 100, 200,20);
+        opcao2.setBounds(490, 100, 200,30);
+        opcao2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                listarLivros();
+            }
+        });
 
         JButton opcao3 = new JButton("Listar Empréstimos");
-        opcao3.setBounds(100, 130, 200,20);
+        opcao3.setBounds(490, 140, 200,30);
+        opcao3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                listarEmprestimos();
+            }
+        });
 
         JButton opcao4 = new JButton("Cadastrar Cliente");
-        opcao4.setBounds(100, 160, 200,20);
+        opcao4.setBounds(490, 180, 200,30);
+        opcao4.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cadastrarCliente();
+            }
+        });
 
         JButton opcao5 = new JButton("Cadastrar Livro");
-        opcao5.setBounds(100, 190, 200,20);
+        opcao5.setBounds(490, 220, 200,30);
+        opcao5.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cadastrarLivro();
+            }
+        });
 
         JButton opcao6 = new JButton("Cadastrar Empréstimo");
-        opcao6.setBounds(100, 220, 200,20);
+        opcao6.setBounds(490, 260, 200,30);
+        opcao6.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cadastrarEmprestimo();
+            }
+        });
 
-        JButton opcao7 = new JButton("Registrar Devolução");
-        opcao7.setBounds(100, 250, 200,20);
-
-        JButton sair = new JButton("sair");
-        sair.setBounds(100, 280, 200,20);
+        JButton sair = new JButton("Sair");
+        sair.setBounds(490, 300, 200,30);
         sair.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent actionEvent) {
+            public void actionPerformed(ActionEvent e) {
                 login();
             }
         });
@@ -119,12 +162,74 @@ public class SystemUI {
         janela.add(opcao4);
         janela.add(opcao5);
         janela.add(opcao6);
-        janela.add(opcao7);
         janela.add(sair);
 
         janela.repaint();
 
     }
+
+    public void listarClientes() {
+        JFrame janela = new JFrame();
+        janela.setLayout(null);
+
+        // Janela
+        janela.setBounds(150,100,1200,700);
+        janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        janela.setVisible(true);
+
+        // Tabela
+        String[] colunas = {"ID", "NOME", "TELEFONE", "CPF", "ENDEREÇO"};
+        DefaultTableModel modelo = new DefaultTableModel(colunas, 0);
+
+        for (Membro m : membros.getMembros()) {
+            String[] linha = {
+                    String.valueOf(m.getId()),
+                    m.getNome(),
+                    m.getTelefone(),
+                    m.getCpf(),
+                    m.getEndereco().toString()
+            };
+            modelo.addRow(linha);
+        }
+
+        JTable tabela = new JTable(modelo);
+        tabela.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        tabela.getColumnModel().getColumn(0).setPreferredWidth(10);
+        tabela.getColumnModel().getColumn(1).setPreferredWidth(100);
+        tabela.getColumnModel().getColumn(2).setPreferredWidth(100);
+        tabela.getColumnModel().getColumn(3).setPreferredWidth(100);
+        tabela.getColumnModel().getColumn(4).setPreferredWidth(300);
+
+        JScrollPane painel = new JScrollPane(tabela);
+        janela.add(painel, BorderLayout.CENTER);
+        painel.setBounds(0, 0, 800,500);
+
+
+        janela.repaint();
+    }
+
+    public void listarLivros() {
+
+    }
+
+    public void listarEmprestimos() {
+
+    }
+
+    public void cadastrarCliente() {
+
+    }
+
+    public void cadastrarLivro() {
+
+    }
+
+    public void cadastrarEmprestimo() {
+
+    }
+
+
+
     /*
     1 - Listar Clientes
     2 - listar livros
