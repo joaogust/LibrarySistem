@@ -24,6 +24,6 @@ public class Endereco {
 
     @Override
     public String toString() {
-        return rua + ", " + numero + ", " + bairro + ", " + cidade + " - " + estado + " | " + CEP;
+        return rua + ", n°" + numero + ", " + bairro + ", " + cidade + " - " + estado + " | " + CEP;
     }
 }

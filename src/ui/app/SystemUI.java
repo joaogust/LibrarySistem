@@ -53,7 +53,7 @@ public class SystemUI {
 
                 if (usuario.equals(usuarioDigitado) && senha.equals(senhaDigitada)) {
                     janela.dispose();
-                    sistema();
+                    menu();
                 } else {
                     JLabel loginIncorreto = new JLabel("Usuario ou senha incorreto!");
                     loginIncorreto.setBounds(510, 300, 200, 20);
@@ -77,7 +77,7 @@ public class SystemUI {
         janela.repaint();
     }
 
-    public void sistema() {
+    public void menu() {
         JFrame janela = new JFrame();
         janela.setLayout(null);
 
@@ -91,7 +91,7 @@ public class SystemUI {
         usuario.setBounds(10, 10, 200,10);
 
         // Botões
-        JButton opcao1 = new JButton("Listar Clientes");
+        JButton opcao1 = new JButton("Lista de Clientes");
         opcao1.setBounds(490, 60,200,30);
         opcao1.addActionListener(new ActionListener() {
             @Override
@@ -100,7 +100,7 @@ public class SystemUI {
             }
         });
 
-        JButton opcao2 = new JButton("Listar Livros");
+        JButton opcao2 = new JButton("Lista de Livros");
         opcao2.setBounds(490, 100, 200,30);
         opcao2.addActionListener(new ActionListener() {
             @Override
@@ -109,7 +109,7 @@ public class SystemUI {
             }
         });
 
-        JButton opcao3 = new JButton("Listar Empréstimos");
+        JButton opcao3 = new JButton("Lista de Empréstimos");
         opcao3.setBounds(490, 140, 200,30);
         opcao3.addActionListener(new ActionListener() {
             @Override
@@ -177,6 +177,11 @@ public class SystemUI {
         janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         janela.setVisible(true);
 
+        // Label
+        JLabel titulo = new JLabel("Lista de Clientes");
+        titulo.setBounds(470,20,300,50);
+        titulo.setFont(new Font("Arial", Font.BOLD, 30));
+
         // Tabela
         String[] colunas = {"ID", "NOME", "TELEFONE", "CPF", "ENDEREÇO"};
         DefaultTableModel modelo = new DefaultTableModel(colunas, 0);
@@ -194,17 +199,48 @@ public class SystemUI {
 
         JTable tabela = new JTable(modelo);
         tabela.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        tabela.getColumnModel().getColumn(0).setPreferredWidth(10);
-        tabela.getColumnModel().getColumn(1).setPreferredWidth(100);
-        tabela.getColumnModel().getColumn(2).setPreferredWidth(100);
-        tabela.getColumnModel().getColumn(3).setPreferredWidth(100);
-        tabela.getColumnModel().getColumn(4).setPreferredWidth(300);
+        tabela.getColumnModel().getColumn(0).setPreferredWidth(37);
+        tabela.getColumnModel().getColumn(1).setPreferredWidth(150);
+        tabela.getColumnModel().getColumn(2).setPreferredWidth(130);
+        tabela.getColumnModel().getColumn(3).setPreferredWidth(130);
+        tabela.getColumnModel().getColumn(4).setPreferredWidth(350);
 
         JScrollPane painel = new JScrollPane(tabela);
+        painel.setBounds(190, 100, 800,250);
+
+        // Botões
+        JButton opcao1 = new JButton("Adicionar Cliente");
+        opcao1.setBounds(490, 370, 200,30);
+        opcao1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            }
+        });
+
+        JButton opcao2 = new JButton("Alterar Cliente");
+        opcao2.setBounds(490, 410, 200,30);
+        opcao2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            }
+        });
+
+        JButton opcao3 = new JButton("Menu");
+        opcao3.setBounds(490, 450, 200,30);
+        opcao3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                menu();
+            }
+        });
+
+
+        // Adicionar
+        janela.add(titulo);
         janela.add(painel, BorderLayout.CENTER);
-        painel.setBounds(0, 0, 800,500);
-
-
+        janela.add(opcao1);
+        janela.add(opcao2);
+        janela.add(opcao3);
         janela.repaint();
     }
 
