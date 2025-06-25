@@ -70,8 +70,6 @@ public class SystemUI {
     public void sistema() {
         JFrame janela = new JFrame();
         janela.setLayout(null);
-        janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        janela.setVisible(true);
 
         // Janela
         janela.setBounds(150,100,1200,700);
@@ -83,16 +81,52 @@ public class SystemUI {
         usuario.setBounds(10, 10, 200,10);
 
         // Botões
-        JButton opcao1 = new JButton("1 - listar Clientes");
-        opcao1.setBounds(100, 100, 200,20);
-        janela.add(opcao1);
+        JButton opcao1 = new JButton("Listar Clientes");
+        opcao1.setBounds(100, 70,200,20);
+
+        JButton opcao2 = new JButton("Listar Livros");
+        opcao2.setBounds(100, 100, 200,20);
+
+        JButton opcao3 = new JButton("Listar Empréstimos");
+        opcao3.setBounds(100, 130, 200,20);
+
+        JButton opcao4 = new JButton("Cadastrar Cliente");
+        opcao4.setBounds(100, 160, 200,20);
+
+        JButton opcao5 = new JButton("Cadastrar Livro");
+        opcao5.setBounds(100, 190, 200,20);
+
+        JButton opcao6 = new JButton("Cadastrar Empréstimo");
+        opcao6.setBounds(100, 220, 200,20);
+
+        JButton opcao7 = new JButton("Registrar Devolução");
+        opcao7.setBounds(100, 250, 200,20);
+
+        JButton sair = new JButton("sair");
+        sair.setBounds(100, 280, 200,20);
+        sair.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                login();
+            }
+        });
 
         // Adicionar
         janela.add(usuario);
+        janela.add(opcao1);
+        janela.add(opcao2);
+        janela.add(opcao3);
+        janela.add(opcao4);
+        janela.add(opcao5);
+        janela.add(opcao6);
+        janela.add(opcao7);
+        janela.add(sair);
+
+        janela.repaint();
 
     }
     /*
-    1 - listar Clientes
+    1 - Listar Clientes
     2 - listar livros
     3 - cadastrar cliente
     4 - cadastrar livro -> cadastrar autor
