@@ -1,4 +1,5 @@
 package ui.app;
+import domain.model.emprestimo.Emprestimo;
 import domain.model.emprestimo.EmprestimoRepository;
 import domain.model.livro.Autor;
 import domain.model.livro.Livro;
@@ -10,8 +11,9 @@ import domain.model.usuario.MembroRepository;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.lang.reflect.Array;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +27,7 @@ public class SystemUI {
         janela.setSize(400, 300);
         janela.setLayout(null);
         janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        janela.setLocationRelativeTo(null); // Centraliza a janela
+        janela.setLocationRelativeTo(null);
         janela.setResizable(false);
 
         // Título
@@ -49,7 +51,7 @@ public class SystemUI {
         JPasswordField campoSenha = new JPasswordField();
         campoSenha.setBounds(140, 110, 180, 25);
 
-        // Mensagem de erro (visível apenas se falhar)
+        // Mensagem de erro
         JLabel mensagemErro = new JLabel("");
         mensagemErro.setBounds(60, 150, 280, 25);
         mensagemErro.setFont(new Font("Arial", Font.BOLD, 12));
@@ -90,69 +92,57 @@ public class SystemUI {
 
     public void menu() {
         JFrame janela = new JFrame("Menu Principal");
-        janela.setSize(400, 450);
+        janela.setSize(400, 350);
         janela.setLayout(null);
         janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        janela.setLocationRelativeTo(null); // Centraliza a janela na tela
+        janela.setLocationRelativeTo(null);
         janela.setResizable(false);
 
-        // Label do usuário
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String dataFormatada = LocalDate.now().format(formatter);
+        JLabel dataHoje = new JLabel(dataFormatada);
+        dataHoje.setBounds(275, 35, 160, 20);
+        dataHoje.setFont(new Font("Arial", Font.PLAIN, 14));
+
         JLabel usuario = new JLabel("Usuário: Admin");
-        usuario.setBounds(20, 10, 200, 20);
+        usuario.setBounds(50, 35, 200, 20);
         usuario.setFont(new Font("Arial", Font.PLAIN, 14));
 
-        // Criar botões com tamanhos e espaçamento consistentes
         int larguraBotao = 300;
         int alturaBotao = 35;
         int xPos = (janela.getWidth() - larguraBotao) / 2;
-        int yInicial = 50;
-        int espacamento = 45;
+        int yInicial = 85;
+        int espacamento = 50;
 
-        JButton opcao1 = new JButton("Lista de Clientes");
-        opcao1.setBounds(xPos, yInicial, larguraBotao, alturaBotao);
-        opcao1.addActionListener(e -> listarClientes());
+        JButton buttonMembros = new JButton("Lista de Membros");
+        buttonMembros.setBounds(xPos, yInicial, larguraBotao, alturaBotao);
+        buttonMembros.addActionListener(e -> listaDeMembros());
 
-        JButton opcao2 = new JButton("Lista de Livros");
-        opcao2.setBounds(xPos, yInicial + espacamento, larguraBotao, alturaBotao);
-        opcao2.addActionListener(e -> listarLivros());
+        JButton buttonLivros = new JButton("Lista de Livros");
+        buttonLivros.setBounds(xPos, yInicial + espacamento, larguraBotao, alturaBotao);
+        buttonLivros.addActionListener(e -> listaDeLivros());
 
-        JButton opcao3 = new JButton("Lista de Empréstimos");
-        opcao3.setBounds(xPos, yInicial + espacamento * 2, larguraBotao, alturaBotao);
-        opcao3.addActionListener(e -> listarEmprestimos());
-
-        JButton opcao4 = new JButton("Cadastrar Cliente");
-        opcao4.setBounds(xPos, yInicial + espacamento * 3, larguraBotao, alturaBotao);
-        opcao4.addActionListener(e -> cadastrarCliente());
-
-        JButton opcao5 = new JButton("Cadastrar Livro");
-        opcao5.setBounds(xPos, yInicial + espacamento * 4, larguraBotao, alturaBotao);
-        opcao5.addActionListener(e -> cadastrarLivro());
-
-        JButton opcao6 = new JButton("Cadastrar Empréstimo");
-        opcao6.setBounds(xPos, yInicial + espacamento * 5, larguraBotao, alturaBotao);
-        opcao6.addActionListener(e -> cadastrarEmprestimo());
+        JButton buttonEmprestimos = new JButton("Lista de Empréstimos");
+        buttonEmprestimos.setBounds(xPos, yInicial + espacamento * 2, larguraBotao, alturaBotao);
+        buttonEmprestimos.addActionListener(e -> listaDeEmprestimos());
 
         JButton sair = new JButton("Sair");
-        sair.setBounds(xPos, yInicial + espacamento * 6, larguraBotao, alturaBotao);
+        sair.setBounds(xPos, yInicial + espacamento * 3, larguraBotao, alturaBotao);
         sair.addActionListener(e -> {
             janela.dispose();
             login();
         });
 
-        // Adiciona componentes na janela
+        janela.add(dataHoje);
         janela.add(usuario);
-        janela.add(opcao1);
-        janela.add(opcao2);
-        janela.add(opcao3);
-        janela.add(opcao4);
-        janela.add(opcao5);
-        janela.add(opcao6);
+        janela.add(buttonMembros);
+        janela.add(buttonLivros);
+        janela.add(buttonEmprestimos);
         janela.add(sair);
-
         janela.setVisible(true);
     }
 
-    public void listarClientes() {
+    public void listaDeMembros() {
         JFrame janela = new JFrame("Lista de Membros");
         janela.setSize(1000, 600);
         janela.setLayout(null);
@@ -163,11 +153,9 @@ public class SystemUI {
         titulo.setFont(new Font("Arial", Font.BOLD, 24));
         titulo.setBounds(390, 20, 300, 30);
 
-        // Cabeçalho da tabela
         String[] colunas = {"ID", "Nome", "Telefone", "CPF", "Endereço"};
         DefaultTableModel modelo = new DefaultTableModel(colunas, 0);
 
-        // Preenchimento da tabela com os membros
         for (Membro m : membros.getMembros()) {
             modelo.addRow(new String[]{
                     String.valueOf(m.getId()),
@@ -189,18 +177,41 @@ public class SystemUI {
         JScrollPane painel = new JScrollPane(tabela);
         painel.setBounds(50, 80, 900, 300);
 
+        JButton cadastrar = new JButton("Cadastrar Membro");
+        cadastrar.setBounds(180, 400, 200, 30);
+        cadastrar.addActionListener(e -> cadastrarMembro());
+
+        JButton alterar = new JButton("Alterar Membro");
+        alterar.setBounds(400, 400, 200, 30);
+        alterar.addActionListener(e -> {
+            int linhaSelecionada = tabela.getSelectedRow();
+            if (linhaSelecionada == -1) {
+                JOptionPane.showMessageDialog(janela, "Selecione um membro da tabela.");
+                return;
+            }
+            int idSelecionado = Integer.parseInt((String) tabela.getValueAt(linhaSelecionada, 0));
+            Membro membro = membros.buscarPorId(idSelecionado);
+            if (membro != null) {
+                alterarMembro(membro);
+            } else {
+                JOptionPane.showMessageDialog(janela, "Membro não encontrado.");
+            }
+        });
+
         // Botão Voltar ao Menu
         JButton voltar = new JButton("Voltar");
-        voltar.setBounds(400, 400, 200, 30);
+        voltar.setBounds(620, 400, 200, 30);
         voltar.addActionListener(e -> janela.dispose());
 
+        janela.add(cadastrar);
         janela.add(titulo);
         janela.add(painel);
+        janela.add(alterar);
         janela.add(voltar);
         janela.setVisible(true);
     }
 
-    public void listarLivros() {
+    public void listaDeLivros() {
         JFrame janela = new JFrame("Lista de Livros");
         janela.setSize(900, 500);
         janela.setLayout(null);
@@ -210,7 +221,6 @@ public class SystemUI {
         titulo.setBounds(330, 20, 300, 30);
         titulo.setFont(new Font("Arial", Font.BOLD, 22));
 
-        // Define colunas da tabela
         String[] colunas = {"ID", "Título", "ISBN", "Autor(es)", "Total de Cópias", "Disponíveis"};
         DefaultTableModel modelo = new DefaultTableModel(colunas, 0);
 
@@ -234,20 +244,44 @@ public class SystemUI {
 
         JTable tabela = new JTable(modelo);
         tabela.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        tabela.getColumnModel().getColumn(0).setPreferredWidth(40);  // ID
-        tabela.getColumnModel().getColumn(1).setPreferredWidth(180); // Título
-        tabela.getColumnModel().getColumn(2).setPreferredWidth(150); // ISBN
-        tabela.getColumnModel().getColumn(3).setPreferredWidth(200); // Autor(es)
-        tabela.getColumnModel().getColumn(4).setPreferredWidth(100); // Total de Cópias
-        tabela.getColumnModel().getColumn(5).setPreferredWidth(100); // Disponíveis
+        tabela.getColumnModel().getColumn(0).setPreferredWidth(40);
+        tabela.getColumnModel().getColumn(1).setPreferredWidth(180);
+        tabela.getColumnModel().getColumn(2).setPreferredWidth(150);
+        tabela.getColumnModel().getColumn(3).setPreferredWidth(200);
+        tabela.getColumnModel().getColumn(4).setPreferredWidth(100);
+        tabela.getColumnModel().getColumn(5).setPreferredWidth(100);
 
         JScrollPane painel = new JScrollPane(tabela);
         painel.setBounds(50, 70, 780, 300);
 
+        JButton cadastrar = new JButton("Cadastrar Livro");
+        cadastrar.setBounds(180, 390, 160, 30);
+        cadastrar.addActionListener(e -> cadastrarLivro());
+
+        JButton alterar = new JButton("Alterar Livro");
+        alterar.setBounds(360, 390, 160, 30);
+        alterar.addActionListener(e -> {
+            int linha = tabela.getSelectedRow();
+            if (linha == -1) {
+                JOptionPane.showMessageDialog(janela, "Selecione um livro para alterar.");
+                return;
+            }
+
+            int idLivro = Integer.parseInt((String) tabela.getValueAt(linha, 0));
+            for (domain.model.livro.Livro l : livros.getLivros()) {
+                if (l.getId() == idLivro) {
+                    alterarLivro(l);
+                    break;
+                }
+            }
+        });
+
         JButton voltar = new JButton("Voltar");
-        voltar.setBounds(380, 390, 120, 30);
+        voltar.setBounds(540, 390, 120, 30);
         voltar.addActionListener(e -> janela.dispose());
 
+        janela.add(cadastrar);
+        janela.add(alterar);
         janela.add(titulo);
         janela.add(painel);
         janela.add(voltar);
@@ -256,62 +290,125 @@ public class SystemUI {
         janela.setVisible(true);
     }
 
-    public void listarEmprestimos() {
+    public void listaDeEmprestimos() {
         JFrame janela = new JFrame("Lista de Empréstimos");
-        janela.setSize(800, 500);
+        janela.setSize(850, 550);
         janela.setLayout(null);
         janela.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         JLabel titulo = new JLabel("Empréstimos Registrados");
-        titulo.setBounds(250, 20, 400, 30);
+        titulo.setBounds(270, 20, 400, 30);
         titulo.setFont(new Font("Arial", Font.BOLD, 22));
 
-        DefaultTableModel modelo = new DefaultTableModel(new String[]{"Membro", "Livros", "Início", "Fim"}, 0);
+        DefaultTableModel modelo = new DefaultTableModel(
+                new String[]{"Membro", "Livros", "Início", "Fim", "Atrasado?", "Finalizado?", "Multa (R$)"}, 0
+        );
+
         for (var e : emprestimos.getEmprestimos()) {
+            e.estaAtrasado();
+
             String livros = e.getCopias().size() + " livro(s)";
+            String atrasado = e.getEstado().estaAtrasado() ? "Sim" : "Não";
+            String finalizado = e.isFinalizado() ? "Sim" : "Não";
+            double multaValor = e.calcularMulta();
+
+            String multaFormatada = String.format("%.2f", multaValor);
+
             modelo.addRow(new String[]{
                     e.getMembro().getNome(),
                     livros,
                     e.getDataInicial().toString(),
-                    e.getDataFinal().toString()
+                    e.getDataFinal().toString(),
+                    atrasado,
+                    finalizado,
+                    multaFormatada
             });
         }
 
         JTable tabela = new JTable(modelo);
+        tabela.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        tabela.getColumnModel().getColumn(0).setPreferredWidth(150); // Membro
+        tabela.getColumnModel().getColumn(1).setPreferredWidth(100); // Livros
+        tabela.getColumnModel().getColumn(2).setPreferredWidth(100); // Início
+        tabela.getColumnModel().getColumn(3).setPreferredWidth(100); // Fim
+        tabela.getColumnModel().getColumn(4).setPreferredWidth(100); // Atrasado
+        tabela.getColumnModel().getColumn(5).setPreferredWidth(100); // Finalizado
+        tabela.getColumnModel().getColumn(6).setPreferredWidth(100); // Multa
+
         JScrollPane painel = new JScrollPane(tabela);
-        painel.setBounds(50, 70, 700, 300);
+        painel.setBounds(50, 70, 730, 300);
+
+        int botaoLargura = 200;
+        int botaoAltura = 30;
+        int yBotoes = 400;
+
+        JButton cadastrar = new JButton("Cadastrar Empréstimo");
+        cadastrar.setBounds(70, yBotoes, botaoLargura, botaoAltura);
+        cadastrar.addActionListener(e -> cadastrarEmprestimo());
+
+        JButton finalizar = new JButton("Finalizar Empréstimo");
+        finalizar.setBounds(325, yBotoes, botaoLargura, botaoAltura);
+        finalizar.addActionListener(e -> {
+            int linhaSelecionada = tabela.getSelectedRow();
+            if (linhaSelecionada == -1) {
+                JOptionPane.showMessageDialog(janela, "Selecione um empréstimo para finalizar.");
+                return;
+            }
+
+            String nomeMembro = (String) tabela.getValueAt(linhaSelecionada, 0);
+            String dataInicioStr = (String) tabela.getValueAt(linhaSelecionada, 2);
+
+            for (Emprestimo emp : emprestimos.getEmprestimos()) {
+                if (emp.getMembro().getNome().equals(nomeMembro) &&
+                        emp.getDataInicial().toString().equals(dataInicioStr) &&
+                        !emp.isFinalizado()) {
+
+                    emp.finalizar();
+                    JOptionPane.showMessageDialog(janela, "Empréstimo finalizado com sucesso.");
+                    janela.dispose();
+                    listaDeEmprestimos(); // reabre atualizada
+                    return;
+                }
+            }
+
+            JOptionPane.showMessageDialog(janela, "Empréstimo já finalizado ou não encontrado.");
+        });
 
         JButton voltar = new JButton("Voltar");
-        voltar.setBounds(350, 390, 100, 30);
+        voltar.setBounds(580, yBotoes, botaoLargura, botaoAltura);
         voltar.addActionListener(e -> janela.dispose());
 
         janela.add(titulo);
         janela.add(painel);
+        janela.add(cadastrar);
+        janela.add(finalizar);
         janela.add(voltar);
+
         janela.setLocationRelativeTo(null);
         janela.setVisible(true);
     }
 
-    public void cadastrarCliente() {
-        JFrame janela = new JFrame("Cadastrar Cliente");
-        janela.setSize(1200, 700);
+    public void cadastrarMembro() {
+        JFrame janela = new JFrame("Cadastrar Membro");
+        janela.setSize(600, 600);
         janela.setLayout(null);
         janela.setLocationRelativeTo(null);
         janela.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         janela.setResizable(false);
 
-        JLabel titulo = new JLabel("Cadastro de Cliente");
-        titulo.setFont(new Font("Arial", Font.BOLD, 28));
-        titulo.setBounds(430, 20, 400, 30);
+        JLabel titulo = new JLabel("Cadastro de Membro");
+        titulo.setFont(new Font("Arial", Font.BOLD, 22));
+        titulo.setBounds(180, 10, 300, 30);
 
-        Font fonteLabel = new Font("Arial", Font.PLAIN, 16);
-        int labelX = 320;
-        int campoX = 500;
-        int largura = 300;
-        int altura = 30;
-        int y = 80;
-        int espacamento = 45;
+        Font fonteLabel = new Font("Arial", Font.PLAIN, 14);
+        int labelX = 40;
+        int campoX = 180;
+        int largura = 350;
+        int altura = 25;
+        int y = 60;
+        int espacamento = 35;
 
+        // Campos
         JLabel labelNome = new JLabel("Nome:");
         labelNome.setBounds(labelX, y, 150, altura);
         labelNome.setFont(fonteLabel);
@@ -375,18 +472,15 @@ public class SystemUI {
         campoCep.setBounds(campoX, y, largura, altura);
 
         JLabel mensagem = new JLabel("");
-        mensagem.setBounds(400, y + 40, 500, 25);
+        mensagem.setBounds(40, y + 35, 500, 25);
         mensagem.setFont(new Font("Arial", Font.BOLD, 14));
 
-        JButton botaoCadastrar = new JButton("Cadastrar Cliente");
-        botaoCadastrar.setBounds(400, y + 70, 200, 35);
+        JButton botaoCadastrar = new JButton("Cadastrar");
+        botaoCadastrar.setBounds(130, y + 70, 140, 30);
 
-        JButton botaoVoltar = new JButton("Voltar ao Menu");
-        botaoVoltar.setBounds(620, y + 70, 200, 35);
-        botaoVoltar.addActionListener(e -> {
-            janela.dispose();
-            menu();
-        });
+        JButton botaoVoltar = new JButton("Voltar");
+        botaoVoltar.setBounds(310, y + 70, 140, 30);
+        botaoVoltar.addActionListener(e -> janela.dispose());
 
         botaoCadastrar.addActionListener(e -> {
             String nome = campoNome.getText().trim();
@@ -418,12 +512,11 @@ public class SystemUI {
 
             Endereco endereco = new Endereco(rua, bairro, cidade, estado, numero, cep);
             Membro novoMembro = new Membro(nome, cpf, endereco, telefone);
-
             membros.adicionarMembroOrdenado(novoMembro);
-            mensagem.setText("Cliente cadastrado com sucesso!");
+
+            mensagem.setText("Membro cadastrado com sucesso!");
             mensagem.setForeground(new Color(0, 128, 0));
 
-            // Limpa os campos
             campoNome.setText("");
             campoCpf.setText("");
             campoTelefone.setText("");
@@ -435,7 +528,7 @@ public class SystemUI {
             campoCep.setText("");
         });
 
-        // Adiciona todos os componentes
+        // Adiciona os componentes
         janela.add(titulo);
         janela.add(labelNome); janela.add(campoNome);
         janela.add(labelCpf); janela.add(campoCpf);
@@ -453,22 +546,214 @@ public class SystemUI {
         janela.setVisible(true);
     }
 
+    public void alterarMembro(Membro membroSelecionado) {
+        JFrame janela = new JFrame("Alterar Membro");
+        janela.setSize(500, 500);
+        janela.setLayout(null);
+        janela.setLocationRelativeTo(null);
+        janela.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        JLabel labelTitulo = new JLabel("Alterar Dados do Membro");
+        labelTitulo.setFont(new Font("Arial", Font.BOLD, 18));
+        labelTitulo.setBounds(130, 10, 300, 30);
+
+        int y = 50;
+        int espacamento = 35;
+
+        JLabel nomeLabel = new JLabel("Nome:");
+        nomeLabel.setBounds(30, y, 150, 25);
+        JTextField nomeField = new JTextField(membroSelecionado.getNome());
+        nomeField.setBounds(180, y, 250, 25);
+
+        y += espacamento;
+        JLabel telefoneLabel = new JLabel("Telefone:");
+        telefoneLabel.setBounds(30, y, 150, 25);
+        JTextField telefoneField = new JTextField(membroSelecionado.getTelefone());
+        telefoneField.setBounds(180, y, 250, 25);
+
+        Endereco end = membroSelecionado.getEndereco();
+
+        y += espacamento;
+        JLabel ruaLabel = new JLabel("Rua:");
+        ruaLabel.setBounds(30, y, 150, 25);
+        JTextField ruaField = new JTextField(end.getRua());
+        ruaField.setBounds(180, y, 250, 25);
+
+        y += espacamento;
+        JLabel numeroLabel = new JLabel("Número:");
+        numeroLabel.setBounds(30, y, 150, 25);
+        JTextField numeroField = new JTextField(String.valueOf(end.getNumero()));
+        numeroField.setBounds(180, y, 250, 25);
+
+        y += espacamento;
+        JLabel bairroLabel = new JLabel("Bairro:");
+        bairroLabel.setBounds(30, y, 150, 25);
+        JTextField bairroField = new JTextField(end.getBairro());
+        bairroField.setBounds(180, y, 250, 25);
+
+        y += espacamento;
+        JLabel cidadeLabel = new JLabel("Cidade:");
+        cidadeLabel.setBounds(30, y, 150, 25);
+        JTextField cidadeField = new JTextField(end.getCidade());
+        cidadeField.setBounds(180, y, 250, 25);
+
+        y += espacamento;
+        JLabel estadoLabel = new JLabel("Estado:");
+        estadoLabel.setBounds(30, y, 150, 25);
+        JTextField estadoField = new JTextField(end.getEstado());
+        estadoField.setBounds(180, y, 250, 25);
+
+        y += espacamento;
+        JLabel cepLabel = new JLabel("CEP:");
+        cepLabel.setBounds(30, y, 150, 25);
+        JTextField cepField = new JTextField(end.getCEP());
+        cepField.setBounds(180, y, 250, 25);
+
+        JButton salvar = new JButton("Salvar Alterações");
+        salvar.setBounds(150, y + 50, 200, 30);
+        salvar.addActionListener(e -> {
+            try {
+                String nome = nomeField.getText();
+                String telefone = telefoneField.getText();
+                String rua = ruaField.getText();
+                String bairro = bairroField.getText();
+                String cidade = cidadeField.getText();
+                String estado = estadoField.getText();
+                String cep = cepField.getText();
+                int numero = Integer.parseInt(numeroField.getText());
+
+                Endereco novoEndereco = new Endereco(rua, bairro, cidade, estado, numero, cep);
+                membroSelecionado.setNome(nome);
+                membroSelecionado.setTelefone(telefone);
+                membroSelecionado.setEndereco(novoEndereco);
+
+                JOptionPane.showMessageDialog(janela, "Membro alterado com sucesso!");
+                janela.dispose();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(janela, "Erro ao alterar membro: " + ex.getMessage());
+            }
+        });
+
+        janela.add(labelTitulo);
+        janela.add(nomeLabel); janela.add(nomeField);
+        janela.add(telefoneLabel); janela.add(telefoneField);
+        janela.add(ruaLabel); janela.add(ruaField);
+        janela.add(numeroLabel); janela.add(numeroField);
+        janela.add(bairroLabel); janela.add(bairroField);
+        janela.add(cidadeLabel); janela.add(cidadeField);
+        janela.add(estadoLabel); janela.add(estadoField);
+        janela.add(cepLabel); janela.add(cepField);
+        janela.add(salvar);
+
+        janela.setVisible(true);
+    }
+
+    public void alterarLivro(Livro livroSelecionado) {
+        JFrame janela = new JFrame("Alterar Livro");
+        janela.setSize(800, 400);
+        janela.setLayout(null);
+        janela.setLocationRelativeTo(null);
+        janela.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        janela.setResizable(false);
+
+        JLabel titulo = new JLabel("Alterar Livro");
+        titulo.setFont(new Font("Arial", Font.BOLD, 24));
+        titulo.setBounds(300, 20, 250, 30);
+
+        Font fonteLabel = new Font("Arial", Font.PLAIN, 16);
+        int labelX = 100;
+        int campoX = 270;
+        int largura = 400;
+        int altura = 30;
+        int y = 70;
+        int espacamento = 40;
+
+        JLabel labelTitulo = new JLabel("Título:");
+        labelTitulo.setBounds(labelX, y, 150, altura);
+        labelTitulo.setFont(fonteLabel);
+        JTextField campoTitulo = new JTextField(livroSelecionado.getTitulo());
+        campoTitulo.setBounds(campoX, y, largura, altura);
+
+        y += espacamento;
+        JLabel labelIsbn = new JLabel("ISBN:");
+        labelIsbn.setBounds(labelX, y, 150, altura);
+        labelIsbn.setFont(fonteLabel);
+        JTextField campoIsbn = new JTextField(livroSelecionado.getISBN());
+        campoIsbn.setBounds(campoX, y, largura, altura);
+
+        y += espacamento;
+        JLabel labelAutores = new JLabel("Autor(es) (separados ','):");
+        labelAutores.setBounds(labelX, y, 200, altura);
+        labelAutores.setFont(fonteLabel);
+        StringBuilder autoresStr = new StringBuilder();
+        for (Autor autor : livroSelecionado.getAutores()) {
+            autoresStr.append(autor.toString()).append(",");
+        }
+        JTextField campoAutores = new JTextField(autoresStr.toString());
+        campoAutores.setBounds(campoX, y, largura, altura);
+
+        JLabel mensagem = new JLabel("");
+        mensagem.setBounds(200, y + 40, 400, 25);
+        mensagem.setFont(new Font("Arial", Font.BOLD, 14));
+        mensagem.setHorizontalAlignment(SwingConstants.CENTER);
+
+        JButton botaoSalvar = new JButton("Salvar Alterações");
+        botaoSalvar.setBounds(200, y + 80, 180, 35);
+        botaoSalvar.addActionListener(e -> {
+            String tituloLivro = campoTitulo.getText().trim();
+            String isbn = campoIsbn.getText().trim();
+            String autoresInput = campoAutores.getText().trim();
+
+            if (tituloLivro.isEmpty() || isbn.isEmpty() || autoresInput.isEmpty()) {
+                mensagem.setText("Preencha todos os campos.");
+                mensagem.setForeground(Color.RED);
+                return;
+            }
+
+            String[] nomesAutores = autoresInput.split(",");
+            ArrayList<Autor> listaAutores = new ArrayList<>();
+            for (String nome : nomesAutores) {
+                listaAutores.add(new Autor(nome.trim()));
+            }
+
+            livroSelecionado.setTitulo(tituloLivro);
+            livroSelecionado.setISBN(isbn);
+            livroSelecionado.setAutores(listaAutores);
+
+            mensagem.setText("Livro alterado com sucesso!");
+            mensagem.setForeground(new Color(0, 128, 0));
+        });
+
+        JButton botaoVoltar = new JButton("Voltar");
+        botaoVoltar.setBounds(420, y + 80, 180, 35);
+        botaoVoltar.addActionListener(e -> janela.dispose());
+
+        janela.add(titulo);
+        janela.add(labelTitulo); janela.add(campoTitulo);
+        janela.add(labelIsbn); janela.add(campoIsbn);
+        janela.add(labelAutores); janela.add(campoAutores);
+        janela.add(botaoSalvar); janela.add(botaoVoltar);
+        janela.add(mensagem);
+
+        janela.setVisible(true);
+    }
+
     public void cadastrarLivro() {
         JFrame janela = new JFrame("Cadastrar Livro");
-        janela.setSize(1200, 700);
+        janela.setSize(800, 500); // tamanho reduzido
         janela.setLayout(null);
         janela.setLocationRelativeTo(null);
         janela.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         janela.setResizable(false);
 
         JLabel titulo = new JLabel("Cadastro de Livro");
-        titulo.setFont(new Font("Arial", Font.BOLD, 28));
-        titulo.setBounds(430, 20, 400, 30);
+        titulo.setFont(new Font("Arial", Font.BOLD, 24));
+        titulo.setBounds(270, 20, 400, 30); // centralizado
 
         Font fonteLabel = new Font("Arial", Font.PLAIN, 16);
-        int labelX = 320;
-        int campoX = 500;
-        int largura = 300;
+        int labelX = 100;
+        int campoX = 300;
+        int largura = 350;
         int altura = 30;
         int y = 80;
         int espacamento = 45;
@@ -501,18 +786,15 @@ public class SystemUI {
         campoQtd.setBounds(campoX, y, largura, altura);
 
         JLabel mensagem = new JLabel("");
-        mensagem.setBounds(400, y + 40, 500, 25);
+        mensagem.setBounds(200, y + 40, 500, 25);
         mensagem.setFont(new Font("Arial", Font.BOLD, 14));
 
         JButton botaoCadastrar = new JButton("Cadastrar Livro");
-        botaoCadastrar.setBounds(400, y + 70, 200, 35);
+        botaoCadastrar.setBounds(200, y + 80, 180, 35);
 
-        JButton botaoVoltar = new JButton("Voltar ao Menu");
-        botaoVoltar.setBounds(620, y + 70, 200, 35);
-        botaoVoltar.addActionListener(e -> {
-            janela.dispose();
-            menu();
-        });
+        JButton botaoVoltar = new JButton("Voltar");
+        botaoVoltar.setBounds(400, y + 80, 180, 35);
+        botaoVoltar.addActionListener(e -> janela.dispose());
 
         botaoCadastrar.addActionListener(e -> {
             String tituloLivro = campoTitulo.getText().trim();

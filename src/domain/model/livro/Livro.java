@@ -1,5 +1,6 @@
 package domain.model.livro;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -9,10 +10,10 @@ public class Livro {
 
     private static int ID = 1;
     private final int id;
-    private final String titulo;
-    private final String ISBN;
-    private final ArrayList<Autor> autores;
-    private final ArrayList<Copia> copias;
+    private String titulo;
+    private String ISBN;
+    private ArrayList<Autor> autores;
+    private ArrayList<Copia> copias;
 
     public Livro(String titulo, String ISBN, int qtdCopias, Autor... autores) {
         this.id = ID++;
@@ -61,5 +62,21 @@ public class Livro {
 
     public ArrayList<Autor> getAutores() {
         return autores;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public void setISBN(String ISBN) {
+        this.ISBN = ISBN;
+    }
+
+    public void setAutores(ArrayList<Autor> autores) {
+        this.autores = autores;
+    }
+
+    public void setCopias(ArrayList<Copia> copias) {
+        this.copias = copias;
     }
 }

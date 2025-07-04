@@ -20,6 +20,30 @@ public class Endereco {
         this.CEP = CEP;
     }
 
+    public String getCEP() {
+        return CEP;
+    }
+
+    public int getNumero() {
+        return numero;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public String getCidade() {
+        return cidade;
+    }
+
+    public String getBairro() {
+        return bairro;
+    }
+
+    public String getRua() {
+        return rua;
+    }
+
     @Override
     public String toString() {
         return rua + ", n°" + numero + ", " + bairro + ", " + cidade + " - " + estado + " | " + CEP;

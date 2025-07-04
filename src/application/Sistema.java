@@ -10,7 +10,6 @@ public class Sistema {
     }
 
     public void iniciar() {
-//        ui.login();
-        ui.menu();
+        ui.login();
     }
 }

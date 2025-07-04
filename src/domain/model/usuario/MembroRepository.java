@@ -25,6 +25,15 @@ public class MembroRepository {
         return membros;
     }
 
+    public Membro buscarPorId(int id) {
+        for (Membro m : membros) {
+            if (m.getId() == id) {
+                return m;
+            }
+        }
+        return null;
+    }
+
     public void adicionarMembroOrdenado(Membro novoMembro) {
         int pos = Collections.binarySearch(membros, novoMembro, Comparator.comparing(Membro::getNome));
         if (pos < 0) {

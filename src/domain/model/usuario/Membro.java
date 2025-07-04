@@ -6,10 +6,10 @@ public class Membro {
 
     private static int ID = 1;
     private final int id;
-    private final String nome;
+    private String nome;
     private String telefone;
-    private final String cpf;
-    private final Endereco endereco;
+    private String cpf;
+    private Endereco endereco;
 
     public Membro(String nome, String cpf, Endereco endereco, String telefone) {
         this.id = ID++;
@@ -37,6 +37,22 @@ public class Membro {
 
     public String getTelefone() {
         return telefone;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
     }
 
     @Override

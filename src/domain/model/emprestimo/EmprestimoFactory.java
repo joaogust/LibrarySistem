@@ -27,6 +27,12 @@ public class EmprestimoFactory {
             throw new RuntimeException("Nem todos os livros possuem cópias disponíveis.");
         }
 
-        return new Emprestimo(membro, copiasSelecionadas, dataInicial, dataFinal);
+        Emprestimo emprestimo = new Emprestimo(membro, copiasSelecionadas, dataInicial, dataFinal);
+
+        emprestimo.setEstado(new EstadoAberto());
+
+        emprestimo.setEstrategiaMulta(new MultaPorDiaStrategy(1.0));
+
+        return emprestimo;
     }
 }
