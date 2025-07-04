@@ -41,12 +41,6 @@ public class Membro {
 
     @Override
     public String toString() {
-        return "Membro{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", telefone='" + telefone + '\'' +
-                ", cpf='" + cpf + '\'' +
-                ", endereco=" + endereco +
-                '}';
+        return nome;
     }
 }

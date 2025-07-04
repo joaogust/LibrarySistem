@@ -2,24 +2,42 @@ package domain.model.emprestimo;
 
 import domain.model.livro.Copia;
 import domain.model.usuario.Membro;
-import domain.model.livro.Livro;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 public class Emprestimo {
-
-    private final UUID id;
     private final Membro membro;
-    private ArrayList<Copia> livros;
-    private LocalDate dataInicial;
-    private LocalDate dataFinal;
+    private final List<Copia> copias;
+    private final LocalDate dataInicial;
+    private final LocalDate dataFinal;
 
-    public Emprestimo(Membro membro, ArrayList<Copia> livros) {
-        this.id = UUID.randomUUID();
+    public Emprestimo(Membro membro, List<Copia> copias, LocalDate dataInicial, LocalDate dataFinal) {
         this.membro = membro;
-        this.livros = livros;
+        this.copias = copias;
+        this.dataInicial = dataInicial;
+        this.dataFinal = dataFinal;
+    }
+    
+    public Membro getMembro() {
+        return membro;
+    }
+
+    public List<Copia> getCopias() {
+        return copias;
+    }
+
+    public LocalDate getDataInicial() {
+        return dataInicial;
+    }
+
+    public LocalDate getDataFinal() {
+        return dataFinal;
+    }
+
+    @Override
+    public String toString() {
+        return "Empréstimo de " + membro.getNome() + " com " + copias.size() + " livro(s) de " + dataInicial + " até " + dataFinal;
     }
 }
